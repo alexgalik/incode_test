@@ -1,0 +1,5 @@
+{
+    "MONGODB_URL":"mongodb://localhost/incode",
+    "JWT_SECRET":"jwtsecretkey",
+    "HOST":"http://localhost:3000"
+}

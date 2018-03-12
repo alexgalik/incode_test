@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.loginpage{
+  height: 100vh;
+  background-color:gainsboro;
+}
