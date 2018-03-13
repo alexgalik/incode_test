@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
+import TableGroups from './TableGroups';
 
 
 class Dashboard extends Component {
@@ -50,6 +51,10 @@ class Dashboard extends Component {
             </div>
           </nav>
         </header>
+        <main>
+          <TableGroups />
+        </main>
+        
       </Fragment>
     )
   }
