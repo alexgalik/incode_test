@@ -12,7 +12,7 @@ class Card extends Component {
 
 		return connectDragSource(connectDropTarget(
 			<div className="post" style={{opacity}}>
-				{card.text}
+				{card.title}
 			</div>
 		));
 	}

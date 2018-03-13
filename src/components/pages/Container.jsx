@@ -16,7 +16,7 @@ class Container extends Component {
                 $push: [card]
             }
         }));
-        console.log("PushCard", this.state.cards)
+        this.props.updateTasks(this.state.name, this.state.cards)
     }
     removeCard(index) {
         this.setState(update(this.state, {
@@ -26,7 +26,7 @@ class Container extends Component {
                 ]
             }
         }));
-        console.log('removeCard', this.state.cards);
+        this.props.updateTasks(this.state.name, this.state.cards)
     }
     moveCard(dragIndex, hoverIndex) {
         const { cards } = this.state;
@@ -40,10 +40,10 @@ class Container extends Component {
                 ]
             }
         }));
-        console.log("MoveCard", this.state.cards)
+        this.props.updateTasks(this.state.name, this.state.cards)
     }
     render() {
-        const { cards, name } = this.state;
+        const { cards } = this.state;
         const { canDrop, isOver, connectDropTarget } = this.props;
         const isActive = canDrop && isOver;
 
@@ -54,7 +54,7 @@ class Container extends Component {
                 {cards.map((card, i) => {
                     return (
                         <Card
-                            key={card.id}
+                            key={card._id}
                             index={i}
                             listId={this.props.id}
                             card={card}
@@ -62,6 +62,7 @@ class Container extends Component {
                             moveCard={this.moveCard.bind(this)} />
                     );
                 })}
+                <div className="card-footer"></div>
             </div>
         );
     }

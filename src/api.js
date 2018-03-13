@@ -8,5 +8,16 @@ export default {
             }).then(res => res.data),
         fetchCurrentUser: () =>
             axios.get("/api/users/current_user").then(res => res.data.user)
+    },
+    groups: {
+        fetchAll: () => axios.get("/api/groups").then(res => res.data.groups),
+        updateGroups: groups =>
+            axios.post("/api/groups/update-groups", {
+                groups
+            }),
+        updateTasks: newTask =>
+            axios.post("/api/groups/update-tasks", {newTask}).then(res => res.data.task)
+        
+            
     }
 };

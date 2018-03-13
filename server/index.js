@@ -6,6 +6,7 @@ const Promise = require("bluebird");
 
 const config = require("./config.json");
 const users = require("./routes/users");
+const groups = require("./routes/groups");
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +25,7 @@ mongoose.Promise = Promise;
 mongoose.connect(config.MONGODB_URL).then(console.log("Mongodb Connected"));
 
 app.use("/api/users", users);
+app.use("/api/groups", groups);
 
 app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
