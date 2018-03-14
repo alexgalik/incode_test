@@ -16,7 +16,6 @@ import { fetchCurrentUserRequest } from './actions/user'
 //css imports
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import 'react-router-modal/css/react-router-modal.css'
 
 const store = createStore(
     rootReducer,
