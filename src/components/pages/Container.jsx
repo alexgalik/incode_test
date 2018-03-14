@@ -7,7 +7,7 @@ import Card from './Card';
 class Container extends Component {
     state = {
         id: this.props.id,
-        name: this.props.name,
+        groupId: this.props.groupId,
         cards: this.props.list
     }
     pushCard(card) {
@@ -16,7 +16,7 @@ class Container extends Component {
                 $push: [card]
             }
         }));
-        this.props.updateTasks(this.state.name, this.state.cards)
+        this.props.updateTasks(this.state.groupId, this.state.cards)
     }
     removeCard(index) {
         this.setState(update(this.state, {
@@ -26,7 +26,7 @@ class Container extends Component {
                 ]
             }
         }));
-        this.props.updateTasks(this.state.name, this.state.cards)
+        this.props.updateTasks(this.state.groupId, this.state.cards)
     }
     moveCard(dragIndex, hoverIndex) {
         const { cards } = this.state;
@@ -40,7 +40,7 @@ class Container extends Component {
                 ]
             }
         }));
-        this.props.updateTasks(this.state.name, this.state.cards)
+        this.props.updateTasks(this.state.groupId, this.state.cards)
     }
     render() {
         const { cards } = this.state;

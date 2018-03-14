@@ -5,13 +5,15 @@ import flow from 'lodash/flow';
 
 
 class Card extends Component {
-
+	onClick(id){
+		console.log('ok', this.props.card._id)
+	}
 	render() {
 		const { card, isDragging, connectDragSource, connectDropTarget } = this.props;
 		const opacity = isDragging ? 0 : 1;
 
 		return connectDragSource(connectDropTarget(
-			<div className="post" style={{opacity}}>
+			<div className="post" style={{opacity}} onClick={() => this.onClick(card._id)}>
 				{card.title}
 			</div>
 		));

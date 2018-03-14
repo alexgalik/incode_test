@@ -1,17 +1,23 @@
-import { GROUPS_FETCHED, TASKS_UPDATED } from "../types";
-const groups = ((state = [], action={}) => {
-    switch(action.type) {
+import {
+    GROUPS_FETCHED,
+    TASKS_UPDATED,
+    GROUP_ADDED
+} from "../types";
+const groups = ((state = [], action = {}) => {
+    switch (action.type) {
         case GROUPS_FETCHED:
             return action.data;
         case TASKS_UPDATED:
-            console.log(action.data)
             state.map(group => {
-                if (group.name === action.data.name) return (group.tasks = action.data.tasks)
+                if (group.groupId === action.data.groupId) return (group.tasks = action.data.tasks)
                 return group
             })
             return state;
-        default: return state;
+        case GROUP_ADDED:
+            return [...state, action.data];
+        default:
+            return state;
     }
- });
- 
- export default groups;
+});
+
+export default groups;

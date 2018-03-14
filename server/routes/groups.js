@@ -5,30 +5,46 @@ const parseErrors = require("../utils/parseErrors");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    Group.find().then(groups => res.json({ groups }));
+    Group.find().then(groups => res.json({
+        groups
+    }));
 });
 
-router.post("/update-groups", (req,res) => {
+router.post("/update-groups", (req, res) => {
     const {groups} = req.body
     Group.remove({}).then(() => {
         console.log("removed");
-    } )
-    groups.map(updGroup => {
-        let group = new Group({
-            name: updGroup.name,
-            tasks: updGroup.tasks
+        groups.map(updGroup => {
+            let group = new Group({
+                name: updGroup.name,
+                groupId: updGroup.groupId,
+                tasks: updGroup.tasks
+            })
+            group.save()
         })
-        group.save()
     })
-    res.sendStatus(200);
+    res.json({
+        groups
+    });
 })
 
 router.post("/update-tasks", (req, res) => {
     // console.log(req.body)
-    const {name, tasks} = req.body.newTask
-    Group.findOneAndUpdate({name: name}, { $set: { tasks: tasks }}, {new: true}).then(updTask => {
+    const {
+        groupId,
+        tasks
+    } = req.body.newTask
+    Group.findOneAndUpdate({
+        groupId: groupId
+    }, {
+        $set: {
+            tasks: tasks
+        }
+    }, {
+        new: true
+    }).then(updTask => {
         const object = {
-            name: updTask.name,
+            groupId: updTask.groupId,
             tasks: updTask.tasks
         }
         res.json({
@@ -38,20 +54,25 @@ router.post("/update-tasks", (req, res) => {
 });
 router.post("/new-group", (req, res) => {
     console.log(req.body)
-    const {name, tasks} = req.body.group
+    const {
+        name,
+        tasks,
+        groupId
+    } = req.body.group
     const group = new Group({
         name,
+        groupId,
         tasks
     });
     group.save()
-    .then(groupRecord => {
-        res.json({
-            group: groupRecord
+        .then(groupRecord => {
+            res.json({
+                group: groupRecord
+            })
         })
-    })
-    .catch(err => res.status(400).json({
-        errors: parseErrors(err.errors)
-    }));
+        .catch(err => res.status(400).json({
+            errors: parseErrors(err.errors)
+        }));
 });
 
 module.exports = router;

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
-import { fetchGroups, updateGroups, updateTasks } from '../../actions/groups';
+import { fetchGroups, updateGroups, updateTasks, addGroup } from '../../actions/groups';
 import TableGroups from './TableGroups';
 
 
@@ -24,7 +24,6 @@ class Dashboard extends Component {
     this.setState({
       errors: nextProps.errors
     });
-    console.log(this.state)
   }
 
   logOut = () => {
@@ -38,12 +37,16 @@ class Dashboard extends Component {
     this.props.updateGroups(groups);
   }
 
-  updateTasks = (name, tasks) => {
+  updateTasks = (groupId, tasks) => {
     const newTask = {
-      name: name,
+      groupId: groupId,
       tasks: tasks
     }
     this.props.updateTasks(newTask)    
+  }
+
+  addGroup = group => {
+    this.props.addGroup(group);
   }
 
   render() {
@@ -67,7 +70,7 @@ class Dashboard extends Component {
           </nav>
         </header>
         <main>
-          <TableGroups list={this.props.groups} updateGroups={this.updateGroups} updateTasks={this.updateTasks}/>
+          <TableGroups list={this.props.groups} updateGroups={this.updateGroups} updateTasks={this.updateTasks} addGroup={this.addGroup}/>
         </main>
         
       </Fragment>
@@ -83,4 +86,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {logout, fetchGroups, updateGroups, updateTasks})(Dashboard);
+export default connect(mapStateToProps, {logout, fetchGroups, updateGroups, updateTasks, addGroup})(Dashboard);
