@@ -42,7 +42,16 @@ class Dashboard extends Component {
       groupId: groupId,
       tasks: tasks
     }
-    this.props.updateTasks(newTask)    
+    this.props.updateTasks(newTask)  
+  }
+
+  addNewTask = (groupId, tasks) => {
+    const newTask = {
+      groupId: groupId,
+      tasks: tasks
+    }
+    this.props.updateTasks(newTask)
+    this.props.fetchGroups();   
   }
 
   addGroup = group => {
@@ -84,6 +93,7 @@ class Dashboard extends Component {
             list={this.props.groups} 
             updateGroups={this.updateGroups} 
             updateTasks={this.updateTasks} 
+            addNewTask={this.addNewTask} 
             addGroup={this.addGroup}
             editGroup={this.editGroup}
             deleteGroup={this.deleteGroup}

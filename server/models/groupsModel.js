@@ -7,7 +7,8 @@ const schema = new mongoose.Schema(
         groupIndex: {type: String, required: true},
         tasks: [{
             description: {type: String},
-            title: {type: String, required: true}
+            title: {type: String, required: true},
+            taskId: {type: String, required: true}
         }]
     },
     { timestamps: true }

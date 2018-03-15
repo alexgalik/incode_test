@@ -5,15 +5,17 @@ import flow from 'lodash/flow';
 
 
 class Card extends Component {
-	onClick(id){
-		console.log('ok', this.props.card._id)
+	
+	onClick(taskId, title, groupId){
+		this.props.ToggleTaskModal();
+		this.props.setEditTaskName(taskId, title, groupId);
 	}
 	render() {
-		const { card, isDragging, connectDragSource, connectDropTarget } = this.props;
+		const { card, isDragging, connectDragSource, connectDropTarget, groupId } = this.props;
 		const opacity = isDragging ? 0 : 1;
 
 		return connectDragSource(connectDropTarget(
-			<div className="post" style={{opacity}} onClick={() => this.onClick(card._id)}>
+			<div className="post" style={{opacity}} onClick={() => this.onClick(card.taskId, card.title, groupId)}>
 				{card.title}
 			</div>
 		));

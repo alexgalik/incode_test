@@ -6,6 +6,7 @@ import Container from './Container';
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 import uuidv4 from "uuid/v4";
 import EditGroupModal from "../modals/editGroup";
+import EditTaskModal from "../modals/editTask";
 
 class TableGroups extends Component {
 
@@ -16,6 +17,11 @@ class TableGroups extends Component {
         editingGroup: {
             name: "",
             groupId: ""
+        },
+        editingTask: {
+            taskId: "",
+            groupId: "",
+            title: ""
         },
         isGroupEgiting: false,
         isTaskEditing: false
@@ -51,7 +57,9 @@ class TableGroups extends Component {
         if (Object.keys(errors).length === 0) {
             const length = this.state.list.length;
             let groupIndex = length;
-            if (length<=this.state.list[length-1].groupIndex){
+            if (length === 0){
+                groupIndex = 0
+            } else if (length<=this.state.list[length-1].groupIndex){
                 groupIndex = Number(this.state.list[length-1].groupIndex) + 1;
             } 
             console.log(groupIndex)
@@ -78,9 +86,55 @@ class TableGroups extends Component {
         this.setState(state => ({ isGroupEgiting: !state.isGroupEgiting }));
     }
 
+    ToggleTaskModal = () => {
+        this.setState(state => ({ isTaskEditing: !state.isTaskEditing }));
+    }
+
+    setEditTaskName = (taskId, title, groupId) => {
+        this.setState({
+            editingTask: {
+                title: title,
+                groupId: groupId,
+                taskId: taskId
+            }
+        })
+    }
+
     editGroup = (updatedGroup) => {
         this.ToggleGroupModal();
         this.props.editGroup(updatedGroup)
+    }
+
+    editTask = (updatedTask) => {
+        this.ToggleTaskModal();
+        let tasks = []
+        this.state.list.map(item => {
+            if (item.groupId === updatedTask.groupId) {
+                tasks = item.tasks
+            }
+            return tasks
+        })
+        tasks = tasks.map(item => {
+            if (item.taskId === updatedTask.taskId) {
+                item.title = updatedTask.title
+            }
+            return item
+        })
+      this.props.addNewTask(updatedTask.groupId, tasks);
+    }
+
+    deleteTask = (groupId, taskId) => {
+        this.ToggleTaskModal();
+        let tasks = []
+        this.state.list.map(item => {
+            if (item.groupId === groupId) {
+                tasks = item.tasks
+            }
+            return tasks
+        })
+        tasks = tasks.filter(item => item.taskId !== taskId);
+        console.log(tasks);
+        this.props.addNewTask(groupId, tasks);
     }
 
     setEditGropName = (name, groupId) => {
@@ -116,7 +170,14 @@ class TableGroups extends Component {
                         </div>
                     </div>
 
-                    <Container id={value._id} groupId={value.groupId} list={value.tasks} updateTasks={this.props.updateTasks} />
+                    <Container 
+                        id={value._id}
+                        groupId={value.groupId} 
+                        list={value.tasks} 
+                        updateTasks={this.props.updateTasks} 
+                        addNewTask={this.props.addNewTask} 
+                        ToggleTaskModal={this.ToggleTaskModal} 
+                        setEditTaskName={this.setEditTaskName}/>
                 </div>
 
             )
@@ -168,11 +229,27 @@ class TableGroups extends Component {
                             name={this.state.editingGroup.name}
                             groupId={this.state.editingGroup.groupId}
                         >
-                            <h1>Edit this post</h1>
+                            <h1>Edit this group</h1>
                         </EditGroupModal>,
                         document.getElementById('edit_group')
                     )
                 }
+                {this.state.isTaskEditing &&
+                    ReactDOM.createPortal(
+                        <EditTaskModal
+                            onClose={this.ToggleTaskModal.bind(this)}
+                            editTask={this.editTask.bind(this)}
+                            deleteTask={this.deleteTask.bind(this)}
+                            title={this.state.editingTask.title}
+                            groupId={this.state.editingTask.groupId}
+                            taskId={this.state.editingTask.taskId}
+                        >
+                            <h1>Edit this task</h1>
+                        </EditTaskModal>,
+                        document.getElementById('edit_task')
+                    )
+                }
+                
             </Fragment>
         )
     }
