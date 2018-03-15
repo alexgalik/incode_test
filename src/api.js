@@ -18,6 +18,10 @@ export default {
         updateTasks: newTask =>
             axios.post("/api/groups/update-tasks", {newTask}).then(res => res.data.task),
         addGroup: group =>
-            axios.post("/api/groups/new-group", {group}).then(res => res.data.group)
+            axios.post("/api/groups/new-group", {group}).then(res => res.data.group),
+        editGroup: group =>
+            axios.post("/api/groups/edit-group", {group}).then(res => res.data.group),
+        deleteGroup: groupId =>
+            axios.post("/api/groups/delete-group", {groupId}).then(res => res.data.groupId)
     }
 };

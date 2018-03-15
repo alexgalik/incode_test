@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
-import { fetchGroups, updateGroups, updateTasks, addGroup } from '../../actions/groups';
+import { fetchGroups, updateGroups, updateTasks, addGroup, editGroup, deleteGroup } from '../../actions/groups';
 import TableGroups from './TableGroups';
 
 
@@ -49,6 +49,16 @@ class Dashboard extends Component {
     this.props.addGroup(group);
   }
 
+  editGroup = group => {
+    this.props.editGroup(group)
+    this.props.fetchGroups();
+    // console.log(group)
+  }
+
+  deleteGroup = groupId => {
+    this.props.deleteGroup(groupId)
+  }
+
   render() {
     return (
       <Fragment>
@@ -70,7 +80,14 @@ class Dashboard extends Component {
           </nav>
         </header>
         <main>
-          <TableGroups list={this.props.groups} updateGroups={this.updateGroups} updateTasks={this.updateTasks} addGroup={this.addGroup}/>
+          <TableGroups 
+            list={this.props.groups} 
+            updateGroups={this.updateGroups} 
+            updateTasks={this.updateTasks} 
+            addGroup={this.addGroup}
+            editGroup={this.editGroup}
+            deleteGroup={this.deleteGroup}
+          />
         </main>
         
       </Fragment>
@@ -81,9 +98,17 @@ class Dashboard extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    groups: state.groups,
+    groups: state.groups.sort((a,b) => {
+      if (a.groupIndex > b.groupIndex) {
+        return 1;
+      }
+      if (a.groupIndex < b.groupIndex) {
+        return -1;
+      }
+      return 0;
+    }),
     errors: state.errors
   };
 };
 
-export default connect(mapStateToProps, {logout, fetchGroups, updateGroups, updateTasks, addGroup})(Dashboard);
+export default connect(mapStateToProps, {logout, fetchGroups, updateGroups, updateTasks, addGroup, editGroup, deleteGroup})(Dashboard);

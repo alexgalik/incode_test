@@ -11,21 +11,25 @@ router.get("/", (req, res) => {
 });
 
 router.post("/update-groups", (req, res) => {
-    const {groups} = req.body
-    Group.remove({}).then(() => {
-        console.log("removed");
-        groups.map(updGroup => {
-            let group = new Group({
-                name: updGroup.name,
-                groupId: updGroup.groupId,
-                tasks: updGroup.tasks
-            })
-            group.save()
-        })
-    })
-    res.json({
+    const {
         groups
-    });
+    } = req.body
+    let updGroups = []
+    groups.map(group => {
+        Group.findOneAndUpdate({
+            groupId: group.groupId
+        }, {
+            $set: {
+                groupIndex: group.groupIndex
+            }
+        }, {
+            new: true
+        }).then(updGroups => {
+                return updGroups;
+            }
+        )
+    })
+    res.json({groups});
 })
 
 router.post("/update-tasks", (req, res) => {
@@ -53,15 +57,16 @@ router.post("/update-tasks", (req, res) => {
     });
 });
 router.post("/new-group", (req, res) => {
-    console.log(req.body)
     const {
         name,
         tasks,
-        groupId
+        groupId,
+        groupIndex
     } = req.body.group
     const group = new Group({
         name,
         groupId,
+        groupIndex,
         tasks
     });
     group.save()
@@ -74,5 +79,32 @@ router.post("/new-group", (req, res) => {
             errors: parseErrors(err.errors)
         }));
 });
+
+router.post("/edit-group", (req, res) => {
+    const {groupId, name} = req.body.group
+    Group.findOneAndUpdate({
+        groupId: groupId
+    }, {
+        $set: {
+            name: name
+        }
+    }, {
+        new: true
+    }).then(updTask => {
+        const object = {
+            groupId: updTask.groupId,
+            name: updTask.name
+        }
+        res.json({
+            group: object
+        });
+    });
+});
+
+router.post("/delete-group", (req, res) => {
+    const {groupId} = req.body
+    Group.remove({groupId : groupId}).then(()=>res.json({groupId}))
+    
+})
 
 module.exports = router;
