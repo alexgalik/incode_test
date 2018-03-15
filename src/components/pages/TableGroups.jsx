@@ -133,7 +133,6 @@ class TableGroups extends Component {
             return tasks
         })
         tasks = tasks.filter(item => item.taskId !== taskId);
-        console.log(tasks);
         this.props.addNewTask(groupId, tasks);
     }
 

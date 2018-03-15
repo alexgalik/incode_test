@@ -120,7 +120,7 @@ class Container extends Component {
                             moveCard={this.moveCard.bind(this)} />
                     );
                 })}
-                <div className="card-footer">{(taskAdding) ? form : <div onClick={this.toggleAdding.bind(this)}>Add new task</div> }</div>
+                <div className="card-footer">{(taskAdding) ? form : <div onClick={this.toggleAdding.bind(this)} className="add-new-task">Add new task</div> }</div>
             </div>
         );
     }

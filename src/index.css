@@ -44,3 +44,6 @@ body {
   cursor: pointer;
   margin-left: 15px;
 }
+.add-new-task{
+  cursor: pointer;
+}

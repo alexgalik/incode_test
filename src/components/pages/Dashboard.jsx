@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { logout } from '../../actions/user';
 import { fetchGroups, updateGroups, updateTasks, addGroup, editGroup, deleteGroup } from '../../actions/groups';
 import TableGroups from './TableGroups';
+import StaticPage from '../static/StaticPage';
 
 
 class Dashboard extends Component {
@@ -31,6 +32,7 @@ class Dashboard extends Component {
       user: ""
     });
     this.props.logout();
+    this.props.fetchGroups();
   };
 
   updateGroups = (groups) => {
@@ -61,7 +63,6 @@ class Dashboard extends Component {
   editGroup = group => {
     this.props.editGroup(group)
     this.props.fetchGroups();
-    // console.log(group)
   }
 
   deleteGroup = groupId => {
@@ -89,7 +90,7 @@ class Dashboard extends Component {
           </nav>
         </header>
         <main>
-          <TableGroups 
+          {(this.state.user !== "") ? <TableGroups 
             list={this.props.groups} 
             updateGroups={this.updateGroups} 
             updateTasks={this.updateTasks} 
@@ -97,7 +98,10 @@ class Dashboard extends Component {
             addGroup={this.addGroup}
             editGroup={this.editGroup}
             deleteGroup={this.deleteGroup}
-          />
+          /> : 
+          <StaticPage list={this.props.groups} />
+          }
+          
         </main>
         
       </Fragment>
