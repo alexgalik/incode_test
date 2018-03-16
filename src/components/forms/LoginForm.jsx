@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import Validator from "validator";
+import FacebookLogin from 'react-facebook-login';
 import { login } from "../../actions/user";
 import history from "../../history";
 
@@ -31,12 +32,14 @@ class LoginForm extends Component {
       });
     }
   };
+
   validate = user => {
     let errors = {};
     if (!Validator.isEmail(user.email)) errors.email = "Invalid email";
     if (!user.password) errors.password = "can't be empty pass";
     return errors;
   };
+
   onChange = e => {
     this.setState({
       user: {
@@ -45,6 +48,19 @@ class LoginForm extends Component {
       }
     });
   };
+
+  responseFacebook = (response) => {
+    const user = {
+      email: response.email,
+      password: response.email
+    }
+    this.props.login(user).then(() => {
+      if (!this.state.errors.global) {
+        history.push('/');
+      }
+    });
+  }
+
   render() {
     const { user, errors } = this.state;
     return (
@@ -95,6 +111,15 @@ class LoginForm extends Component {
 
                       <button type="submit" className="btn btn-primary btn-block">Login / Register</button>
                     </form>
+                    <br/>
+                    <FacebookLogin
+                      appId="846918208843728"
+                      autoLoad={true}
+                      fields="email"
+                      callback={this.responseFacebook}
+                      cssClass="my-facebook-button-class"
+                      icon="fa-facebook"
+                    />
                   </div>
                 </div>
               </div>
